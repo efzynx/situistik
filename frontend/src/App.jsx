@@ -2,58 +2,53 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-// Hapus import App.css karena sudah tidak kita gunakan
-// import './App.css'
+import './index.css';
 
-// URL base dari API FastAPI kita. Pastikan backend sedang berjalan!
+// Impor komponen-komponen baru kita
+import StatusResult from './components/StatusResult';
+import DnsResult from './components/DnsResult';
+import WhoisResult from './components/WhoisResult';
+import Footer from './components/Footer';
+
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
 function App() {
-  // State untuk menyimpan input domain dari pengguna
   const [domain, setDomain] = useState('');
-  
-  // State untuk menyimpan hasil gabungan dari API
   const [results, setResults] = useState(null);
-  
-  // State untuk menandakan proses loading (saat fetching data)
   const [loading, setLoading] = useState(false);
-  
-  // State untuk menyimpan pesan error jika terjadi
   const [error, setError] = useState('');
+  
+  // State baru untuk melacak tab yang sedang aktif
+  const [activeTab, setActiveTab] = useState('status');
 
-  // Fungsi yang akan dijalankan saat form disubmit
   const handleAnalyze = async (e) => {
-    e.preventDefault(); // Mencegah form dari refresh halaman
+    e.preventDefault();
     if (!domain) {
       setError('Nama domain tidak boleh kosong.');
       return;
     }
 
-    // Reset state sebelum memulai analisis baru
     setLoading(true);
     setResults(null);
     setError('');
+    setActiveTab('status'); // Selalu reset ke tab status saat analisis baru
 
     try {
-      // Kita panggil semua endpoint secara paralel untuk efisiensi!
       const [statusRes, whoisRes, dnsRes] = await Promise.all([
         axios.get(`${API_BASE_URL}/status/${domain}`),
         axios.get(`${API_BASE_URL}/whois/${domain}`),
         axios.get(`${API_BASE_URL}/dns/${domain}`)
       ]);
       
-      // Gabungkan semua hasil menjadi satu objek
       setResults({
         status: statusRes.data,
         whois: whoisRes.data,
         dns: dnsRes.data
       });
-
     } catch (err) {
       console.error("API Fetch Error:", err);
       setError('Gagal mengambil data. Pastikan domain valid dan API server backend berjalan.');
     } finally {
-      // Apapun hasilnya (sukses/gagal), hentikan loading
       setLoading(false);
     }
   };
@@ -61,7 +56,7 @@ function App() {
   return (
     <div className="container">
       <h1>Situistik 🕵️</h1>
-      <p>Analisis Status, Whois, dan DNS untuk Domain Anda</p>
+      <p>Cek apakah sebuah situs, aplikasi, atau layanan sedang down untuk semua orang atau hanya Anda.</p>
       
       <form onSubmit={handleAnalyze}>
         <input
@@ -76,24 +71,43 @@ function App() {
         </button>
       </form>
 
-      {/* Tampilkan pesan error jika ada */}
       {error && <p className="error">{error}</p>}
 
-      {/* Tampilkan hasil jika sudah ada */}
+      {loading && <p>Loading...</p>}
+
       {results && (
         <div className="results">
-          <h2>Hasil untuk: {domain}</h2>
-          
-          <h3>Status Website</h3>
-          <pre>{JSON.stringify(results.status, null, 2)}</pre>
+          {/* Navigasi Tab */}
+          <div className="tabs">
+            <button 
+              className={`tab-button ${activeTab === 'status' ? 'active' : ''}`}
+              onClick={() => setActiveTab('status')}
+            >
+              Status
+            </button>
+            <button 
+              className={`tab-button ${activeTab === 'dns' ? 'active' : ''}`}
+              onClick={() => setActiveTab('dns')}
+            >
+              DNS Records
+            </button>
+            <button 
+              className={`tab-button ${activeTab === 'whois' ? 'active' : ''}`}
+              onClick={() => setActiveTab('whois')}
+            >
+              Whois Info
+            </button>
+          </div>
 
-          <h3>Informasi Whois</h3>
-          <pre>{JSON.stringify(results.whois, null, 2)}</pre>
-          
-          <h3>Record DNS</h3>
-          <pre>{JSON.stringify(results.dns, null, 2)}</pre>
+          {/* Konten Tab */}
+          <div className="tab-content">
+            {activeTab === 'status' && <StatusResult statusData={results.status} />}
+            {activeTab === 'dns' && <DnsResult dnsData={results.dns} />}
+            {activeTab === 'whois' && <WhoisResult whoisData={results.whois} />}
+          </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 }

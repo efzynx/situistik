@@ -87,3 +87,132 @@ pre {
   border-radius: 5px;
   text-align: left;
 }
+
+
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #333;
+  margin-bottom: 1.5rem;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 1em;
+  font-weight: bold;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-button.active {
+  color: #a78bfa;
+  border-bottom-color: #a78bfa;
+}
+
+.status-card {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.status-card.is-up {
+  background-color: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+}
+
+.status-card.is-down {
+  background-color: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.4);
+}
+
+.status-icon {
+  font-size: 3rem;
+  margin-right: 1.5rem;
+}
+
+.status-text h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 2em;
+}
+.status-text p {
+  margin: 0;
+  color: #ccc;
+}
+
+.details-container {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.details-table th, .details-table td {
+  border: 1px solid #444;
+  padding: 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.details-table th {
+  background-color: #2f2f2f;
+}
+
+.details-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.details-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+}
+
+/* Tambahkan ini di paling bawah src/index.css */
+
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #444;
+  color: #aaa;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.footer h3 {
+  color: #fff;
+  border-bottom: 2px solid #4f46e5;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.footer a {
+  color: #a78bfa;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-section {
+  margin-bottom: 1.5rem;
+}
+
+.footer-meta {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 0.8em;
+}
