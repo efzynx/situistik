@@ -19,8 +19,9 @@ const DnsResult = ({ dnsData }) => {
           {Object.entries(dnsData).map(([type, values]) => (
             values.length > 0 && (
               <tr key={type}>
-                <td>{type}</td>
-                <td>
+                {/* Tambahkan atribut data-label di sini */}
+                <td data-label="Tipe Record">{type}</td>
+                <td data-label="Nilai">
                   {values.map((value, index) => (
                     <div key={index}>{value}</div>
                   ))}
